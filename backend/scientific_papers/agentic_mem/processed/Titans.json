@@ -1,0 +1,19 @@
+{
+  "title": "Titans: Learning to Memorize at Test Time",
+  "summary": "Titans introduces a neural long-term memory module that learns to memorize historical context at test time using a gradient-based surprise metric with momentum and weight decay. Combined with a short-term attention mechanism and persistent memory, the architecture processes long sequences efficiently while scaling beyond 2M tokens. Three variants (Memory as Context, Memory as Gate, Memory as Layer) are proposed and evaluated on language modeling, reasoning, and long-context retrieval tasks, outperforming Transformers and modern recurrent models.",
+  "key_insights": [
+    "Design a deep neural memory (MLP with 2+ layers) that updates its weights at test time via gradient descent on an associative memory loss, using momentum and data-dependent forgetting (weight decay) to manage memory capacity over long sequences.",
+    "Use the gradient of the memory with respect to the input as a 'surprise' metric—larger gradients mean more memorable events—and combine past surprise (momentum) with momentary surprise to decide what to memorize.",
+    "Implement forgetting via a gated weight decay mechanism (α_t) that controls how much of the past memory is retained, analogous to forget gates in modern RNNs. This prevents memory overflow in very long contexts.",
+    "Parallelize training by chunking the sequence and using mini-batch gradient descent with matmuls and parallel associative scans (for momentum) to handle O(N) FLOPs efficiently on hardware accelerators.",
+    "For retrieval, simply do a forward pass through the memory (without weight update) using the query token, which returns the stored association. This is cheap and supports fast inference.",
+    "Augment the long-term memory with persistent memory: a small set of learnable, data-independent tokens prepended to the input, which store task-level knowledge and mitigate attention bias toward initial tokens.",
+    "In the 'Memory as Context' (MAC) variant, retrieve historical information from the memory for each segment, concatenate it with the segment and persistent tokens, then run full causal attention. Update the memory only with attention-filtered outputs to avoid storing irrelevant tokens.",
+    "In the 'Memory as Gate' (MAG) variant, run sliding-window attention on the input (with persistent prefix) and combine its output with the memory output via gating. This treats attention as short-term and memory as fading long-term.",
+    "In the 'Memory as Layer' (MAL) variant, pass the input through the memory module first, then through sliding-window attention. This is simpler but less expressive than MAC or MAG.",
+    "The neural memory module alone (no attention) already outperforms Transformers and linear recurrent models like Mamba2 and Gated DeltaNet on language modeling and long-context retrieval, highlighting the power of deep, non-linear, gated memory updates.",
+    "Deeper memory modules (3–4 layers) improve perplexity and long-context robustness over shallow ones, at a moderate linear cost in training throughput. This creates a trade-off between model capacity and speed.",
+    "In needle-in-a-haystack tasks, Titans (especially MAC) maintain high accuracy up to 2M tokens, whereas baselines like Mamba2 and DeltaNet degrade sharply beyond 8K tokens. This is due to the combination of forgetting, momentum, and deep memory.",
+    "Use 1D depthwise convolutions after query/key/value projections (as in Mamba) and SiLU activations; normalize queries and keys with ℓ2 norm; and apply residual connections and gating before final output projection for stable training."
+  ]
+}

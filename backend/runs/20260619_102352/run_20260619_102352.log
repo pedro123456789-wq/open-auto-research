@@ -1,0 +1,9 @@
+10:23:52 INFO Log: /Users/pedro_lourenco/Documents/AI-Research/open-auto-researcher/backend/runs/20260619_102352/run_20260619_102352.log
+10:23:52 INFO Self-Improving Memory Agent | run=agentic_mem
+10:23:52 INFO Run dir: /Users/pedro_lourenco/Documents/AI-Research/open-auto-researcher/backend/runs/20260619_102352
+10:23:52 INFO Seed:    /Users/pedro_lourenco/Documents/AI-Research/open-auto-researcher/backend/baselines/agentic_mem/base_agentic_pipeline_openrouter.py
+10:23:52 INFO Config: children_per_parent=3 | run_timeout=8000s
+10:23:52 INFO Seeding root node from /Users/pedro_lourenco/Documents/AI-Research/open-auto-researcher/backend/baselines/agentic_mem/base_agentic_pipeline_openrouter.py
+10:23:54 INFO Evaluating AgenticBaseline | 5 convs × 10 q = 50 total
+10:23:54 INFO Conv 1/5 | ingesting ...
+10:24:16 INFO Conv 1/5 | 4/10 answered | acc 50.0% (2/4)
