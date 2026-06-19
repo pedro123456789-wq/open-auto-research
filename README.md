@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/logo.png" alt="Open Auto Researcher" width="420">
+</p>
+
 # Open Auto Researcher
 
 **A scaffold for building domain-specific, self-improving AI research systems.**
