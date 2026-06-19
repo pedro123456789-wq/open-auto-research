@@ -6,6 +6,7 @@ dynamically from cfg.RUN_NAME, so switching runs only requires changing config.
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import importlib
 import inspect
@@ -275,6 +276,19 @@ async def _run(run_dir: str) -> Archive:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-name", default=None)
+    parser.add_argument("--run-dir", default=None)
+    args = parser.parse_args()
+
+    if args.run_name:
+        cfg.RUN_NAME = args.run_name
+        # SEED_PIPELINE and DATASET are derived from RUN_NAME at import time; recompute.
+        cfg.SEED_PIPELINE = os.path.join(cfg._HERE, "baselines", cfg.RUN_NAME, "base_agentic_pipeline_openrouter.py")
+        cfg.DATASET = os.path.join(cfg._HERE, "evaluators", cfg.RUN_NAME, "locomo10.json")
+    if args.run_dir:
+        cfg.RESUME_RUN_DIR = args.run_dir
+
     os.makedirs(cfg.RUNS_DIR, exist_ok=True)
     run_dir = storage.resolve_run_dir(cfg.RUNS_DIR, cfg.RESUME_RUN_DIR)
     setup_run_logging(run_dir)

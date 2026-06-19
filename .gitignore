@@ -4,3 +4,4 @@ backend/.env
 locomo_base/runs/**
 
 runs/**
+desktop/node_modules

@@ -47,7 +47,7 @@ verbatim.
   • Build on the provided papers while remaining original
   • Prefer practical, generalisable memory architectures
   • REQUIRED: combine a parametric memory method AND a text-based external memory \
-method (see constraint 6 below)
+method (see constraint 7 below)
 
 ## Hard constraints
 
@@ -89,25 +89,35 @@ ingest. Ingest and query paths must match — a mismatch yields empty reads.
 from baseline import Baseline. Do not import from eval; scoring is external.
 
 ----
-5. Generalisability — your approach should be generalisable to other tasks and \
+5. Package imports (MANDATORY) — the top-of-file import block in the parent \
+baseline is fixed. You MUST copy it verbatim into your replacement file:
+
+  • Do NOT add, remove, reorder, or rename any import lines in that block.
+  • Do NOT import any package that is not already present there — even if \
+unused in your design. If you need functionality, use only what is already \
+imported (stdlib, numpy, scipy, torch, chromadb, sklearn, etc.).
+  • Keep every existing import line exactly as written, including # noqa: F401 \
+comments and section headers, even when a package is unused in your code.
+
+Only imports below that block (e.g. from baseline import Baseline) may stay \
+as-is; do not introduce new third-party or stdlib imports anywhere in the file.
+
+----
+6. Generalisability — your approach should be generalisable to other tasks and \
 datasets, not just the LOCOMO benchmark. DO NOT hardcode anything specific to \
 the LOCOMO benchmark or questions mentioned.
 
 ----
-6. Dual memory architecture (MANDATORY) — your design MUST incorporate BOTH of \
+7. Dual memory architecture (MANDATORY) — your design MUST incorporate BOTH of \
 the following memory types in a meaningful, non-trivial way:
 
   a) PARAMETRIC memory — knowledge encoded in learned model weights or learned \
-representations.  Examples: dense embeddings from a pre-trained encoder \
-(sentence-transformers, HuggingFace AutoModel, ONNX MiniLM), a LoRA-adapted \
-model, a trainable importance scorer, compressed latent representations, or \
-any other approach that stores information in continuous learned parameters.
+representations. Use only libraries already imported in the parent file (e.g. \
+numpy, scipy, torch, sklearn). Do not add new embedding or ML imports.
 
   b) TEXT-BASED external memory — knowledge stored and retrieved as raw text \
-through harness-level tool calls. Examples: plain-text store + read_memory \
-tool, BM25 or TF-IDF retrieval, a vector-store (chromadb) backed by \
-pre-computed embeddings with a semantic_search tool, or any other approach that \
-lets the agent explicitly fetch text snippets during its loop.
+through harness-level tool calls. Use only libraries already imported in the \
+parent file (e.g. rank_bm25, chromadb, sklearn TfidfVectorizer, networkx).
 
   Both methods must be active at ingest time (populating their respective \
 stores) and at query time (the agent loop must expose tool actions for each). \
@@ -116,7 +126,8 @@ A design that uses only one type will be rejected.
 ## What you may change
 
 Prompts, tool schemas, action formats, constants, memory layout, ingestion \
-logic, helpers, and any other implementation detail.
+logic, helpers, and any other implementation detail — except the top-of-file \
+package import block (see constraint 5).
 
 ## Output
 
